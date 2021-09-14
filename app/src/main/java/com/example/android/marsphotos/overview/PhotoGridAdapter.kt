@@ -9,8 +9,17 @@ import com.example.android.marsphotos.databinding.GridViewItemBinding
 import com.example.android.marsphotos.network.MarsPhoto
 
 
-class PhotoGridAdapter : ListAdapter<MarsPhoto,
-        PhotoGridAdapter.MarsPhotoViewHolder>(DiffCallback) {
+class PhotoGridAdapter :
+    ListAdapter<MarsPhoto, PhotoGridAdapter.MarsPhotosViewHolder>(DiffCallback) {
+
+    class MarsPhotosViewHolder(
+        private var binding: GridViewItemBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(MarsPhoto: MarsPhoto) {
+            binding.photo = MarsPhoto
+            binding.executePendingBindings()
+        }
+    }
 
     companion object DiffCallback : DiffUtil.ItemCallback<MarsPhoto>() {
         override fun areItemsTheSame(oldItem: MarsPhoto, newItem: MarsPhoto): Boolean {
@@ -20,26 +29,19 @@ class PhotoGridAdapter : ListAdapter<MarsPhoto,
         override fun areContentsTheSame(oldItem: MarsPhoto, newItem: MarsPhoto): Boolean {
             return oldItem.imgSrcUrl == newItem.imgSrcUrl
         }
-
     }
 
-    class MarsPhotoViewHolder(
-        private var binding: GridViewItemBinding
-    ) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(MarsPhoto: MarsPhoto) {
-            binding.photo = MarsPhoto
-            binding.executePendingBindings()
-        }
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): MarsPhotosViewHolder {
+        return MarsPhotosViewHolder(
+            GridViewItemBinding.inflate(LayoutInflater.from(parent.context))
+        )
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MarsPhotoViewHolder {
-        return MarsPhotoViewHolder(GridViewItemBinding.inflate(LayoutInflater.from(parent.context)))
-    }
-
-    override fun onBindViewHolder(holder: MarsPhotoViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MarsPhotosViewHolder, position: Int) {
         val marsPhoto = getItem(position)
         holder.bind(marsPhoto)
     }
-
 }

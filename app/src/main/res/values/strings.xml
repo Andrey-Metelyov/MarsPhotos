@@ -17,4 +17,6 @@
 
 <resources>
     <string name="app_name">Mars Photos</string>
+    <string name="application_status">Application status</string>
+    <string name="image">image</string>
 </resources>
